@@ -11,6 +11,7 @@ Other suggested improvements are listed below
 I was using Laravel Homestead but can theoretically run using Laravel's `php artisan serve`, though I'm using Sqlite which I couldn't get to work on my Windows host due to the path. 
 
     cp .env.example .env # change sqlite path as needed
+    touch database/database.sqlite
     php artisan migrate:fresh
     php artisan db:seed
 
@@ -25,6 +26,10 @@ http://recipes.test/api/recipes?cuisine=british
 
 Single Recipe:
 http://recipes.test/api/recipes/1
+
+### Tests
+
+Functional tests are found in `RecipeControllerTest`, run by calling `phpunit`
     
     
 ## Improvements

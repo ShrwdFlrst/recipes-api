@@ -10,7 +10,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class RecipeController extends Controller
 {
-    const DEFAULT_PER_PAGE = 2;
+    const DEFAULT_PER_PAGE = 5;
 
     /**
      * Display a listing of the resource.
@@ -44,10 +44,9 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
-        $recipe = new Recipe();
-        $recipe->fill($request->all());
+        $recipe = Recipe::create($request->all());
 
-        return response()->json(compact($recipe), Response::HTTP_CREATED);
+        return response()->json($recipe->toArray(), Response::HTTP_CREATED);
     }
 
     /**
@@ -75,6 +74,6 @@ class RecipeController extends Controller
 
         $recipe->update($request->all());
 
-        return response()->json(compact($recipe));
+        return response()->json($recipe->toArray());
     }
 }

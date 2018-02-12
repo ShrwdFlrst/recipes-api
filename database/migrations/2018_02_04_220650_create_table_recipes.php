@@ -21,7 +21,7 @@ class CreateTableRecipes extends Migration
 
             $table->string('title');
             $table->string('slug');
-            $table->string('short_title');
+            $table->string('short_title')->nullable();
 
             $table->text('marketing_description');
             $table->integer('calories_kcal');
@@ -29,9 +29,9 @@ class CreateTableRecipes extends Migration
             $table->integer('fat_grams');
             $table->integer('carbs_grams');
 
-            $table->string('bulletpoint1');
-            $table->string('bulletpoint2');
-            $table->string('bulletpoint3');
+            $table->string('bulletpoint1')->nullable();
+            $table->string('bulletpoint2')->nullable();
+            $table->string('bulletpoint3')->nullable();
 
             $table->enum('recipe_diet_type_id', ['meat', 'fish', 'vegetarian']);
             $table->enum('season', ['all']);
@@ -42,7 +42,7 @@ class CreateTableRecipes extends Migration
             $table->string('equipment_needed', 255);
             $table->string('origin_country');
             $table->enum('recipe_cuisine', ['asian', 'italian', 'british', 'mediterranean', 'mexican']);
-            $table->text('in_your_box');
+            $table->text('in_your_box')->nullable();
             $table->integer('gousto_reference');
         });
     }
