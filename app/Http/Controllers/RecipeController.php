@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\RecipeCollection;
 use App\Recipe;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class RecipeController extends Controller
@@ -43,7 +44,10 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $recipe = new Recipe();
+        $recipe->fill($request->all());
+
+        return response()->json(compact($recipe), Response::HTTP_CREATED);
     }
 
     /**
@@ -66,6 +70,11 @@ class RecipeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        /** @var Recipe $recipe */
+        $recipe = Recipe::findOrFail($id);
+
+        $recipe->update($request->all());
+
+        return response()->json(compact($recipe));
     }
 }
