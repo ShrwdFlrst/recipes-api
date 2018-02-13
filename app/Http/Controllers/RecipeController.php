@@ -61,6 +61,24 @@ class RecipeController extends Controller
     }
 
     /**
+     * Rate the specified recipe
+     *
+     * @param Request $request
+     * @param  int $id
+     * @return Response
+     */
+    public function rate(Request $request, $id)
+    {
+        $recipe = Recipe::findOrFail($id);
+
+        $recipe->rating += $request->post('rating');
+        $recipe->rating_count++;
+        $recipe->save();
+
+        return response()->json($recipe->toArray());
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

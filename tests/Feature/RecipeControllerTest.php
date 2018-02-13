@@ -78,6 +78,34 @@ class RecipeControllerTest extends TestCase
     }
 
     /**
+     * Test filtering by cuisine
+     *
+     * @param string $cuisine
+     * @param int $expectedCount
+     *
+     * @dataProvider filteredCuisineCountProvider
+     */
+    public function testIndexRecipesWithFilterByCuisineSuccess($cuisine, $expectedCount)
+    {
+        $this->seed('RecipeTableSeeder');
+        $response = $this->get('/api/recipes?cuisine=' . $cuisine);
+        $json = $response->json();
+
+        $this->assertCount($expectedCount, $json['data']);
+    }
+
+    /**
+     * @return array
+     */
+    public function filteredCuisineCountProvider()
+    {
+        return [
+            ['british', 4],
+            ['asian', 2],
+        ];
+    }
+
+    /**
      * Test inserting a new recipe
      */
     public function testCreateRecipeSuccess()
@@ -123,6 +151,41 @@ class RecipeControllerTest extends TestCase
         // Check that recipe exists in the db
         $dbRecipe = Recipe::all()[0];
         $this->assertArraySubset($newRecipeData, $dbRecipe->toArray());
+    }
+
+    /**
+     * Test rating a recipe
+     */
+    public function testRatingRecipeSuccess()
+    {
+        $data = $this->getCsvData();
+        $data[0]['rating'] = 2;
+        $data[0]['rating_count'] = 1;
+        $existingRecipe = Recipe::create($data[0]);
+        $rateData = [
+            'rating' => 4,
+        ];
+
+        $url = '/api/recipes/' . $existingRecipe->id . '/rate';
+
+        $response = $this->json(Request::METHOD_PUT, $url, $rateData);
+
+        $expectedData = $existingRecipe->toArray();
+        $expectedData['average_rating'] = ($data[0]['rating'] + $rateData['rating']) / 2;
+        $expectedData['rating'] = $data[0]['rating'] + $rateData['rating'];
+        $expectedData['rating_count']++;
+        // Ignore fields we won't be updating
+        unset($expectedData['updated_at']);
+
+        // Check that the correct status and json are returned
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson($expectedData)
+        ;
+
+        // Check that recipe rating has been updated in the db
+        $dbRecipe = Recipe::all()[0];
+        $this->assertEquals($expectedData['average_rating'], $dbRecipe->average_rating);
     }
 
     /**

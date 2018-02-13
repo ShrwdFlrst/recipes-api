@@ -17,5 +17,5 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
-
+Route::put('recipes/{recipe}/rate', 'RecipeController@rate');
 Route::resource('recipes', 'RecipeController');

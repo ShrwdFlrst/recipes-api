@@ -14,7 +14,7 @@ I was using Laravel Homestead but can theoretically run using Laravel's `php art
     touch database/database.sqlite
     php artisan migrate:fresh
     php artisan db:seed
-
+    
 
 ### Example endpoints
 
@@ -37,3 +37,4 @@ Functional tests are found in `RecipeControllerTest`, run by calling `phpunit`
 - Validate data when creating/updating recipes
 - Authentication on routes e.g. prevent non-admin users from editing recipes
 - Return different json depending on user role
+- Move ratings into a separate related `recipe_rating` table so who rated, when and the average rating can be recorded
